@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- ===== Project Build Settings ===== -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>DataProm.ETL</AssemblyName>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>true</IsPackable>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+    <!-- ===== NuGet Package Metadata ===== -->
+  <PropertyGroup>
+    <PackageId>DataProm.ETL</PackageId>
+    <PackageVersion>2.5.0</PackageVersion>
+    <Version>2.5.0</Version>
+    <Authors>Maros Kolibas</Authors>
+    <Company>DataProm</Company>
+    <Description>
+      Executable solution what shows the capabilities of the DataProm platform.
+      Performs simple operation to simulate the ETL process.
+    </Description>
+    <PackageTags>DataProm;ETL;Connector;Sqlite</PackageTags>
+    <RepositoryUrl>https://github.com/dataprom-online/platform</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseFile>/LICENSE.txt</PackageLicenseFile>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <PackageProjectUrl>https://www.dataprom.online</PackageProjectUrl>
+  </PropertyGroup>
+
+<!-- ===== Dependencies ===== -->
+  <!-- <ItemGroup>
+    <ProjectReference Include="..\DataProm.Core\DataProm.Core.csproj" />
+    <ProjectReference Include="..\Providers\DataProm.MonoSqlite.Core\DataProm.MonoSqlite.Core.csproj" />
+  </ItemGroup> -->
+
+</Project>

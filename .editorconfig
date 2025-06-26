@@ -1,0 +1,86 @@
+# top-most EditorConfig file
+root = true
+
+##########################################################
+# GLOBAL SETTINGS
+##########################################################
+
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+##########################################################
+# C# FILES
+##########################################################
+
+[*.cs]
+dotnet_sort_system_directives_first = true
+dotnet_style_qualification_for_field = false:suggestion
+dotnet_style_qualification_for_property = false:suggestion
+dotnet_style_qualification_for_method = false:suggestion
+dotnet_style_qualification_for_event = false:suggestion
+
+# Use 'var' when the type is obvious
+csharp_style_var_when_type_is_apparent = true:suggestion
+# Use explicit type when not obvious
+csharp_style_var_elsewhere = false:suggestion
+
+# Prefer expression-bodied members
+csharp_style_expression_bodied_methods = true:suggestion
+csharp_style_expression_bodied_properties = true:suggestion
+csharp_style_expression_bodied_ctors = true:suggestion
+
+# Use file-scoped namespaces (C# 10+)
+csharp_style_namespace_declarations = file_scoped:suggestion
+
+# Use 'is not null' instead of '!= null'
+csharp_style_prefer_is_not_expression = true:suggestion
+
+# Optional braces for clarity
+csharp_prefer_braces = true:warning
+
+##########################################################
+# JSON FILES
+##########################################################
+
+[*.json]
+indent_style = space
+indent_size = 2
+
+[*.jsonc]
+indent_style = space
+indent_size = 2
+
+##########################################################
+# XML / Config Files
+##########################################################
+
+[*.xml]
+indent_style = space
+indent_size = 2
+
+##########################################################
+# Markdown
+##########################################################
+
+[*.md]
+trim_trailing_whitespace = false
+
+##########################################################
+# YAML
+##########################################################
+
+[*.yml]
+indent_style = space
+indent_size = 2
+
+[*.yaml]
+indent_style = space
+indent_size = 2
+
+
+
