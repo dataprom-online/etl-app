@@ -22,7 +22,7 @@ This demo shows the power and flexibility of the **DataProm Platform**, a data e
 
 ```text
 DemoApp [AppName]
-├── app.config.json                   # Global app configuration
+├── app.config.json                  # Global app configuration
 ├── Test-sqlite [Project]            # Sample project with schema + sync setup
 │   ├── fetch.xml                    # ETL fetch definitions
 │   ├── test.db                      # Local storage for the data
