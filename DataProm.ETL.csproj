@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
-    <!-- ===== NuGet Package Metadata ===== -->
+  <!-- ===== NuGet Package Metadata ===== -->
   <PropertyGroup>
     <PackageId>DataProm.ETL</PackageId>
     <PackageVersion>2.5.0</PackageVersion>
@@ -27,11 +27,9 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <PackageProjectUrl>https://www.dataprom.online</PackageProjectUrl>
   </PropertyGroup>
-
-<!-- ===== Dependencies ===== -->
-  <!-- <ItemGroup>
-    <ProjectReference Include="..\DataProm.Core\DataProm.Core.csproj" />
-    <ProjectReference Include="..\Providers\DataProm.MonoSqlite.Core\DataProm.MonoSqlite.Core.csproj" />
-  </ItemGroup> -->
-
+  <ItemGroup>
+    <PackageReference Include="DataProm.Core" Version="1.0.6" />
+    <PackageReference Include="DataProm.Sqlite.Core" Version="1.0.1" />
+  </ItemGroup>
+  <!-- ===== Dependencies ===== -->
 </Project>
