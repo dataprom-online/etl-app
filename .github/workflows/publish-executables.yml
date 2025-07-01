@@ -2,10 +2,8 @@ name: 🚀 Publish Executables + SHA256 Checksums
 
 on:
   push:
-    branches: [ main ]
-    paths:
-      - '**/*.csproj'
-      - '.github/workflows/**'
+    tags:
+      - 'v*.*.*'
 
 jobs:    
   build-and-release:
