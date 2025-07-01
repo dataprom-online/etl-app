@@ -152,6 +152,10 @@ You can download platform-specific executables from the [v1.0.0 Release page](ht
 - Only download and run the executable corresponding to your platform (Windows, Linux, or macOS).
 
 
+## ⚠️ Authentication Required
+
+📄 [Authentication & License Info](docs/authentication.md)
+
 ## ▶️ Run the Demo using CLI
 
 ```bash
