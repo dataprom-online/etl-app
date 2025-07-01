@@ -2,8 +2,10 @@ name: 🚀 Publish Executables + SHA256 Checksums
 
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches: [ main ]
+    paths:
+      - '**/*.csproj'
+      - '.github/workflows/**'
 
 jobs:    
   build-and-release:
@@ -23,6 +25,27 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'
+
+    - name: 🗑️ Delete previous release and tag if exists
+      env:
+        GH_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
+      run: |
+        RELEASE_TAG="v1.0.0" # Change this dynamically if needed
+        echo "🔍 Checking for existing release: $RELEASE_TAG"
+
+        if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+          echo "⚠️ Release '$RELEASE_TAG' exists. Deleting..."
+          gh release delete "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --yes
+        else
+          echo "✅ No existing release for '$RELEASE_TAG'"
+        fi
+
+        if git rev-parse "$RELEASE_TAG" >/dev/null 2>&1; then
+          echo "🗑️ Tag '$RELEASE_TAG' exists. Deleting..."
+          git push origin :refs/tags/"$RELEASE_TAG"
+        else
+          echo "✅ No existing tag '$RELEASE_TAG'"
+        fi
 
     - name: 🔐 Authenticate GitHub Packages
       run: |
