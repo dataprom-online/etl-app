@@ -108,17 +108,17 @@ internal class AppData
     ]
 }";
 
-    static readonly string SYNC_CONFIG_SQLITE = @"
+    static readonly string SYNC_CONFIG_SQLITE = @$"
 <Configuration>
   <SyncConfig forceDeleteData='false' incrementalDownload='true'/>
   <Connections>
       <UploadConnection 
       type='sqlite' 
-      connectionString='Data Source=/Users/marosko/Library/Application Support/DataProm/DemoApp/SqliteETL/test.db' 
+      connectionString='Data Source={Path.Combine(App.ApplicationRoot, AppName, PROJECT_NAME, "test.db")}'
       database='test.db'/>
       <DownloadConnection 
       type='sqlite' 
-      connectionString='Data Source=/Users/marosko/Library/Application Support/DataProm/DemoApp/SqliteETL/test.db' 
+      connectionString='Data Source={Path.Combine(App.ApplicationRoot, AppName, PROJECT_NAME, "test.db")}'
       database='test.db'/>
   </Connections>
 </Configuration>";
