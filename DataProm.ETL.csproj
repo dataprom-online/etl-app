@@ -26,7 +26,7 @@
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <!-- 👇 Icon settings -->
-    <PackageIcon>favicon.ico</PackageIcon>
+    <PackageIcon>favicon.png</PackageIcon>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <!-- ===== Dependencies ===== -->
@@ -35,6 +35,9 @@
     <PackageReference Include="DataProm.Sqlite.Core" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="favicon.ico" Pack="true" PackagePath="" />
+    <None Include="favicon.png" Pack="true" PackagePath="" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="LICENSE.txt" Pack="true" PackagePath="" visible="true"/>
+</ItemGroup>
 </Project>
