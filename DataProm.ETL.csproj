@@ -28,8 +28,8 @@
     <PackageProjectUrl>https://www.dataprom.online</PackageProjectUrl>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="DataProm.Core" Version="1.0.6" />
-    <PackageReference Include="DataProm.Sqlite.Core" Version="1.0.2" />
+    <PackageReference Include="DataProm.Core" Version="1.0.7" />
+    <PackageReference Include="DataProm.Sqlite.Core" Version="1.0.3" />
   </ItemGroup>
   <!-- ===== Dependencies ===== -->
 </Project>
