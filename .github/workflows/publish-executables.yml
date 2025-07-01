@@ -18,6 +18,14 @@ jobs:
           - osx-x64
 
     steps:
+    - name: 🧾 Checkout source
+      uses: actions/checkout@v4
+
+    - name: 🛠 Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
     - name: 🔐 Authenticate GitHub Packages
       run: |
         dotnet nuget add source \
@@ -26,14 +34,6 @@ jobs:
         --store-password-in-clear-text \
         --name github \
         "https://nuget.pkg.github.com/dataprom-online/index.json"
-
-    - name: 🧾 Checkout source
-      uses: actions/checkout@v4
-
-    - name: 🛠 Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
 
     - name: 🏗 Publish single-file executable
       run: |
