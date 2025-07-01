@@ -55,8 +55,6 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         draft: true
-        prerelease: false
-        generate_release_notes: false
         tag_name: ${{ github.ref_name }}
         files: |
           DataProm.ETL-${{ matrix.runtime }}.zip
