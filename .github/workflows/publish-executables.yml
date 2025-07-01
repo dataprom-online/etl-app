@@ -45,6 +45,14 @@ jobs:
           -p:PublishTrimmed=false \
           -o publish/${{ matrix.runtime }}
 
+    - name: 🏷 Rename binary + generate checksum
+      run: |
+        RUNTIME="${{ matrix.runtime }}"
+        OUTPUT="publish/$RUNTIME"
+        FILENAME="DataProm.ETL-${RUNTIME}"
+        [[ "$RUNTIME" == win-* ]] && EXT=".exe" || EXT=".sh"
+        mv "$OUTPUT/DataProm.ETL$EXT" "./$FILENAME$EXT"
+
     - name: 📦 Zip build output
       run: |
         cd publish/${{ matrix.runtime }}
