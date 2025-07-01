@@ -23,7 +23,7 @@ This demo shows the power and flexibility of the **DataProm Platform**, a data e
 ```text
 DemoApp [AppName]
 ├── app.config.json                  # Global app configuration
-├── Test-sqlite [Project]            # Sample project with schema + sync setup
+├── SqliteETL [Project]              # Sample project with schema + sync setup
 │   ├── fetch.xml                    # ETL fetch definitions
 │   ├── test.db                      # Local storage for the data
 │   └── Configuration
@@ -60,13 +60,8 @@ All major operations are timed, logged, and tracked.
 
 ## 💻 Platform Support
 
-The project uses raw SQLite. For **Linux or macOS**, you should enable MonoSQLite:
-
-```bash
-dotnet build -p:UseMonoSqlite=true
-```
-
-For **Windows**, the default Microsoft SQLite provider works out-of-the-box.
+The project uses raw Mono.SQLite. For **Linux or macOS**
+For **Windows**, the default System.Data.SQLite provider.
 
 ---
 
@@ -121,7 +116,7 @@ This demo is designed as a **starter ETL + schema-driven analytics tool**:
 
 ## 📄 Example Data Preview
 
-After running the pipeline, the local `test.db` SQLite file is created under `Test-sqlite/test.db`. It contains the transformed and normalized output of your ETL process.
+After running the pipeline, the local `test.db` SQLite file is created under `SqliteETL/test.db`. It contains the transformed and normalized output of your ETL process.
 
 ### 🧾 Tables Overview
 
