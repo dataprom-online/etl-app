@@ -1,0 +1,53 @@
+name: 🚀 Publish Executables + SHA256 Checksums
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        runtime:
+          - win-x64
+          - linux-x64
+          - osx-x64
+
+    steps:
+    - name: 🧾 Checkout source
+      uses: actions/checkout@v4
+
+    - name: 🛠 Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: 🏗 Publish single-file executable
+      run: |
+        dotnet publish ./DataProm.ETL.csproj \
+          -c Release \
+          -r ${{ matrix.runtime }} \
+          --self-contained true \
+          -p:PublishSingleFile=true \
+          -p:PublishTrimmed=false \
+          -o publish/${{ matrix.runtime }}
+
+    - name: 🏷 Rename binary + generate checksum
+      run: |
+        RUNTIME="${{ matrix.runtime }}"
+        OUTPUT="publish/$RUNTIME"
+        FILENAME="DataProm.ETL-${RUNTIME}"
+        [[ "$RUNTIME" == win-* ]] && EXT=".exe" || EXT=""
+        mv "$OUTPUT/DataProm.ETL$EXT" "./$FILENAME$EXT"
+        shasum -a 256 "./$FILENAME$EXT" > "./$FILENAME$EXT.sha256"
+
+    - name: 🚀 Upload executables & hashes to GitHub Releases
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.ref_name }}
+        files: |
+          DataProm.ETL-${{ matrix.runtime }}*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
