@@ -7,6 +7,9 @@ on:
       - '**/*.csproj'
       - '.github/workflows/**'
 
+env:
+  ORG_PAT_TOKEN: ${{secrets.ORG_PAT_TOKEN}}
+
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
@@ -34,6 +37,8 @@ jobs:
         --store-password-in-clear-text \
         --name github \
         "https://nuget.pkg.github.com/dataprom-online/index.json"
+      env:
+        ORG_PAT_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
 
     - name: 🏗 Publish single-file executable
       run: |
