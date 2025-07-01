@@ -2,10 +2,8 @@ name: 🚀 Publish Executables + SHA256 Checksums
 
 on:
   push:
-    branches: [ main ]
-    paths:
-      - '**/*.csproj'
-      - '.github/workflows/**'
+    tags:
+      - 'v*.*.*'
 
 jobs:    
   build-and-release:
@@ -47,20 +45,17 @@ jobs:
           -p:PublishTrimmed=false \
           -o publish/${{ matrix.runtime }}
 
-    - name: 🏷 Rename binary + generate checksum
+    - name: 📦 Zip build output
       run: |
-        RUNTIME="${{ matrix.runtime }}"
-        OUTPUT="publish/$RUNTIME"
-        FILENAME="DataProm.ETL-${RUNTIME}"
-        [[ "$RUNTIME" == win-* ]] && EXT=".exe" || EXT=""
-        mv "$OUTPUT/DataProm.ETL$EXT" "./$FILENAME$EXT"
-        shasum -a 256 "./$FILENAME$EXT" > "./$FILENAME$EXT.sha256"
+        cd publish/${{ matrix.runtime }}
+        zip -r ../../DataProm.ETL-${{ matrix.runtime }}.zip *
+        cd -
 
-    - name: 🚀 Upload executables & hashes to GitHub Releases
+    - name: 🚀 Upload to GitHub Releases
       uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ github.ref_name }}
         files: |
-          DataProm.ETL-${{ matrix.runtime }}*
+          DataProm.ETL-${{ matrix.runtime }}.zip
       env:
         ORG_PAT_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
