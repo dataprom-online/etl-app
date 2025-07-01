@@ -30,7 +30,7 @@ jobs:
       run: |
         dotnet nuget add source \
         --username Maros316 \
-        --password "${{ secrets.GITHUB_TOKEN }}" \
+        --password "${{ secrets.ORG_PAT_TOKEN }}" \
         --store-password-in-clear-text \
         --name github \
         "https://nuget.pkg.github.com/dataprom-online/index.json"
@@ -63,4 +63,4 @@ jobs:
         files: |
           DataProm.ETL-${{ matrix.runtime }}*
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
