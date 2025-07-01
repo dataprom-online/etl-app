@@ -58,4 +58,4 @@ jobs:
         files: |
           DataProm.ETL-${{ matrix.runtime }}.zip
       env:
-        ORG_PAT_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
