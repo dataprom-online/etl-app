@@ -2,8 +2,10 @@ name: 🚀 Publish Executables + SHA256 Checksums
 
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches: [ main ]
+    paths:
+      - '**/*.csproj'
+      - '.github/workflows/**'
 
 jobs:    
   build-and-release:
@@ -75,13 +77,13 @@ jobs:
     - name: 🚀 Upload to GitHub Releases
       uses: softprops/action-gh-release@v1
       with:
+        # The key line:
+        skip_release_assets: true
         draft: false
         prerelease: false
         generate_release_notes: false
-        tag_name: ${{ github.ref_name }}
+        tag_name: v1.0.0
         files: |
           DataProm.ETL-${{ matrix.runtime }}.zip
-        # The key line:
-        skip_release_assets: true
       env:
         GITHUB_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
