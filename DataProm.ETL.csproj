@@ -31,13 +31,13 @@
   </PropertyGroup>
   <!-- ===== Dependencies ===== -->
   <ItemGroup>
-    <PackageReference Include="DataProm.Core" Version="1.0.7" />
-    <PackageReference Include="DataProm.Sqlite.Core" Version="1.0.4" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="favicon.png" Pack="true" PackagePath="" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.txt" Pack="true" PackagePath="" visible="true" />
 </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DataProm.Core" Version="2.0.0" />
+    <PackageReference Include="DataProm.Sqlite.Core" Version="2.0.0" />
+  </ItemGroup>
 </Project>
