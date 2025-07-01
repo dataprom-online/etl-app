@@ -81,6 +81,9 @@ For **Windows**, the default System.Data.SQLite provider.
 You can download platform-specific executables from the [v1.0.0 Release page](https://github.com/dataprom-online/etl-app/releases/tag/v1.0.0). Follow these steps based on your operating system:
 
 ---
+<details>
+
+<summary>Windows</summary>
 
 ### **Windows (win-x64)**
 
@@ -93,8 +96,11 @@ You can download platform-specific executables from the [v1.0.0 Release page](ht
    - Right-click the ZIP file and select “Extract All...”
 3. **Run**  
    - Double-click `DataProm.ETL-win-x64.exe` to launch the application.
-
+</details>
 ---
+<details>
+
+<summary>Linux</summary>
 
 ### **Linux (linux-x64)**
 
@@ -118,8 +124,12 @@ You can download platform-specific executables from the [v1.0.0 Release page](ht
      ```sh
      ./DataProm.ETL-linux-x64
      ```
-
+</details>
 ---
+
+<details>
+
+<summary>macOS (osx)</summary>
 
 ### **macOS (osx-x64)**
 
@@ -143,7 +153,7 @@ You can download platform-specific executables from the [v1.0.0 Release page](ht
      ```sh
      ./DataProm.ETL-osx-x64
      ```
-
+</details>
 ---
 
 **Note:**  
@@ -151,10 +161,13 @@ You can download platform-specific executables from the [v1.0.0 Release page](ht
 - If you encounter a permission error, ensure you have run `chmod +x` as above.  
 - Only download and run the executable corresponding to your platform (Windows, Linux, or macOS).
 
+---
 
 ## ⚠️ Authentication Required
 
 📄 [Authentication & License Info](docs/authentication.md)
+
+---
 
 ## ▶️ Run the Demo using CLI
 
