@@ -21,15 +21,21 @@
       Performs simple operation to simulate the ETL process.
     </Description>
     <PackageTags>DataProm;ETL;Connector;Sqlite</PackageTags>
-    <RepositoryUrl>https://github.com/dataprom-online/platform</RepositoryUrl>
+    <RepositoryUrl>https://github.com/dataprom-online/etl-app</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseFile>/LICENSE.txt</PackageLicenseFile>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <PackageProjectUrl>https://www.dataprom.online</PackageProjectUrl>
+    <!-- 👇 Icon settings -->
+    <PackageIcon>favicon.png</PackageIcon>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
+  <!-- ===== Dependencies ===== -->
   <ItemGroup>
     <PackageReference Include="DataProm.Core" Version="1.0.7" />
     <PackageReference Include="DataProm.Sqlite.Core" Version="1.0.3" />
   </ItemGroup>
-  <!-- ===== Dependencies ===== -->
+  <ItemGroup>
+    <!-- 👇 Ensure icon is included in the NuGet package -->
+    <None Include="favicon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
 </Project>
