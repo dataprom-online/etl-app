@@ -54,8 +54,13 @@ jobs:
     - name: 🚀 Upload to GitHub Releases
       uses: softprops/action-gh-release@v1
       with:
+        draft: false
+        prerelease: false
+        generate_release_notes: false
         tag_name: ${{ github.ref_name }}
         files: |
           DataProm.ETL-${{ matrix.runtime }}.zip
+        # The key line:
+        skip_release_assets: true
       env:
         GITHUB_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
