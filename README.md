@@ -76,7 +76,83 @@ For **Windows**, the default System.Data.SQLite provider.
 
 ---
 
-## ▶️ Run the Demo
+## How to Download and Execute the Release
+
+You can download platform-specific executables from the [v1.0.0 Release page](https://github.com/dataprom-online/etl-app/releases/tag/v1.0.0). Follow these steps based on your operating system:
+
+---
+
+### **Windows (win-x64)**
+
+1. **Download**  
+   - Download the asset named:  
+     ```
+     DataProm.ETL-win-x64.zip
+     ```
+2. **Extract**  
+   - Right-click the ZIP file and select “Extract All...”
+3. **Run**  
+   - Double-click `DataProm.ETL-win-x64.exe` to launch the application.
+
+---
+
+### **Linux (linux-x64)**
+
+1. **Download**  
+   - Download the asset named:  
+     ```
+     DataProm.ETL-linux-x64.zip
+     ```
+2. **Extract**  
+   - Open a terminal in the download folder and run:  
+     ```sh
+     unzip DataProm.ETL-linux-x64.zip
+     ```
+3. **Make Executable**  
+   - If needed, make the file executable:  
+     ```sh
+     chmod +x DataProm.ETL-linux-x64
+     ```
+4. **Run**  
+   - Start the application with:  
+     ```sh
+     ./DataProm.ETL-linux-x64
+     ```
+
+---
+
+### **macOS (osx-x64)**
+
+1. **Download**  
+   - Download the asset named:  
+     ```
+     DataProm.ETL-osx-x64.zip
+     ```
+2. **Extract**  
+   - Use Finder to unzip, or in Terminal:  
+     ```sh
+     unzip DataProm.ETL-osx-x64.zip
+     ```
+3. **Make Executable**  
+   - If needed, make the file executable:  
+     ```sh
+     chmod +x DataProm.ETL-osx-x64
+     ```
+4. **Run**  
+   - Start the application with:  
+     ```sh
+     ./DataProm.ETL-osx-x64
+     ```
+
+---
+
+**Note:**  
+- For Linux and macOS, you do **not** need a `.sh` extension; run the file directly after making it executable.
+- If you encounter a permission error, ensure you have run `chmod +x` as above.  
+- Only download and run the executable corresponding to your platform (Windows, Linux, or macOS).
+
+
+## ▶️ Run the Demo using CLI
 
 ```bash
 dotnet run --project DemoApp
