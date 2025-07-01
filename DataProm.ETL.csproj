@@ -35,7 +35,6 @@
     <PackageReference Include="DataProm.Sqlite.Core" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <!-- 👇 Ensure icon is included in the NuGet package -->
     <None Include="favicon.ico" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>
