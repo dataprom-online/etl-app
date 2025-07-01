@@ -18,6 +18,15 @@ jobs:
           - osx-x64
 
     steps:
+    - name: 🔐 Authenticate GitHub Packages
+      run: |
+        dotnet nuget add source \
+        --username dataprom-online \
+        --password "${{ secrets.GITHUB_TOKEN }}" \
+        --store-password-in-clear-text \
+        --name github \
+        "https://nuget.pkg.github.com/dataprom-online/index.json"
+
     - name: 🧾 Checkout source
       uses: actions/checkout@v4
 
