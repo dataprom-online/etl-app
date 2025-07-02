@@ -78,7 +78,7 @@ jobs:
     - name: 🚀 Upload to GitHub Releases
       uses: softprops/action-gh-release@v1
       with:
-        skip_release_assets: true
+        # skip_release_assets: true
         draft: false
         prerelease: false
         generate_release_notes: false
