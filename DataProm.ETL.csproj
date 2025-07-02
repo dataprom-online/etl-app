@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <!-- ===== Project Build Settings ===== -->
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -8,7 +7,6 @@
     <IsPackable>true</IsPackable>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
-
   <!-- ===== NuGet Package Metadata ===== -->
   <PropertyGroup>
     <PackageId>DataProm.ETL</PackageId>
@@ -25,13 +23,12 @@
     <RepositoryType>git</RepositoryType>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <!-- 👇 Icon settings -->
-    <PackageIcon>favicon.png</PackageIcon>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <!-- ===== Dependencies ===== -->
   <ItemGroup>
-    <None Include="favicon.png" Pack="true" PackagePath="" />
+    <Content Include="favicon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.txt" Pack="true" PackagePath="" visible="true" />
