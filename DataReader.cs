@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using DataProm.Core.Data;
 
 namespace DataProm.ETL;
@@ -150,8 +151,6 @@ internal class DataReader : IDataReader
     public DateTime GetDateTime(int i) => (DateTime)data[i];
     public decimal GetDecimal(int i) => (decimal)data[i];
     public double GetDouble(int i) => (double)data[i];
-
-    //[return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicProperties)]
     public Type GetFieldType(int i) => _properties[i].GetType();
     public float GetFloat(int i) => (float)data[i];
     public Guid GetGuid(int i) => (Guid)data[i];

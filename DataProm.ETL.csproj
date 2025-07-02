@@ -32,9 +32,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.txt" Pack="true" PackagePath="" visible="true" />
-</ItemGroup>
+  </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DataProm.Core" Version="2.0.1" />
-    <PackageReference Include="DataProm.Sqlite.Core" Version="2.0.0" />
+    <PackageReference Include="DataProm.Core" Version="1.0.0" />
+    <PackageReference Include="DataProm.Sqlite.Core" Version="1.0.0" />
   </ItemGroup>
 </Project>
