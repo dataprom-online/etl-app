@@ -24,11 +24,11 @@
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <!-- ===== Dependencies ===== -->
   <ItemGroup>
-    <Content Include="favicon.ico" />
+    <Content Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.txt" Pack="true" PackagePath="" visible="true" />
