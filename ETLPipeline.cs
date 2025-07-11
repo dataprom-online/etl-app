@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using DataProm.Core.Data;
 using DataProm.Core.FetchXml;
 
@@ -49,40 +50,18 @@ internal static class ETLPipeline
         {
             throw new ArgumentNullException("Fetch with id 'TestTable' not defined in FetchXml project folder.");
         }
-        MetaRecord meta = MetaData.GetMetaRecord("DummyData");
-        FieldReaderFactory.FieldReader[] _readers = FieldReaderFactory.GetOrCreateFieldReaders(meta);
-
-        string sql = FetchXmlRepository.GetSqlQuery("DummyData");
-        if (string.IsNullOrEmpty(sql))
-        {
-            throw new ArgumentNullException("FetchXmlRepository.GetSqlQuery('DummyData');");
-        }
-
+        
         Console.WriteLine("Download data from local db..");
-
         using (var db = AppDatabase.DownloadDb)
         {
             db.EnsureOpen();
-            using (var r = db.ExecuteQuery(sql))
+            using (IDataRecordReader reader = db.OpenDataReader())
             {
-                while (r.Read())
+                foreach (DynamicRecordStruct rec in reader.GetRecordsByFetch(fetch))
                 {
-                    DynamicRecordStruct rec = new DynamicRecordStruct(ref meta);
-                    for (int i = 0; i < r.FieldCount; i++)
-                    {
-                        if (!r.IsDBNull(i))
-                        {
-                            rec.Set(i, _readers[i](r, i));
-                        }
-                    }
                     yield return rec;
                 }
             }
-            
-            // using (var reader = db.OpenDataReader())
-            // {
-            //     return reader.GetRecordsByFetch(fetch);
-            // }
         }
     }
     /// <summary>
