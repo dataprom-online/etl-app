@@ -5,21 +5,17 @@ on:
     branches: [ main ]
     paths:
       - '**/*.csproj'
-      - '**/*.cs'
       - '.github/workflows/**'
 
 jobs:    
   build-and-release:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - os: ubuntu-latest
-            runtime: linux-x64
-          - os: windows-latest
-            runtime: win-x64
-          - os: macos-latest
-            runtime: osx-x64
-    runs-on: ${{ matrix.os }}
+        runtime:
+          - win-x64
+          - linux-x64
+          - osx-x64
 
     steps:
     - name: 🧾 Checkout source
@@ -30,32 +26,13 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    - name: 🔐 Authenticate GitHub Packages
-      run: |
-        dotnet nuget add source \
-          --username dataprom-online \
-          --password "${{ secrets.ORG_PAT_TOKEN }}" \
-          --store-password-in-clear-text \
-          --name github \
-          "https://nuget.pkg.github.com/dataprom-online/index.json"
-
-    - name: 📥 Restore dependencies
-      run: dotnet restore ./DataProm.ETL.csproj
-
     - name: 🗑️ Delete previous release and tag if exists
-      id: get_version
-      shell: bash
+      env:
+        GH_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
       run: |
-        # extract version from csproj using grep
-        VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" DataProm.ETL.csproj)
-        RELEASE_TAG="v$VERSION"
-
-        # export release tag to GitHub Actions output
-        echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
-
-        echo "📦 Using release tag: $RELEASE_TAG"
-
+        RELEASE_TAG="v1.0.0" # Change this dynamically if needed
         echo "🔍 Checking for existing release: $RELEASE_TAG"
+
         if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
           echo "⚠️ Release '$RELEASE_TAG' exists. Deleting..."
           gh release delete "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --yes
@@ -70,9 +47,19 @@ jobs:
           echo "✅ No existing tag '$RELEASE_TAG'"
         fi
 
+    - name: 🔐 Authenticate GitHub Packages
+      run: |
+        dotnet nuget add source \
+        --username dataprom-online \
+        --password "${{ secrets.ORG_PAT_TOKEN }}" \
+        --store-password-in-clear-text \
+        --name github \
+        "https://nuget.pkg.github.com/dataprom-online/index.json"
+      env:
+        ORG_PAT_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
+
     - name: 🏗 Publish single-file executable
       run: |
-        echo "Building release ${{ steps.get_version.outputs.release_tag }} for runtime ${{ matrix.runtime }}"
         dotnet publish ./DataProm.ETL.csproj \
           -c Release \
           -r ${{ matrix.runtime }} \
@@ -90,10 +77,12 @@ jobs:
     - name: 🚀 Upload to GitHub Releases
       uses: softprops/action-gh-release@v1
       with:
+        # The key line:
+        skip_release_assets: true
         draft: false
         prerelease: false
         generate_release_notes: false
-        tag_name: ${{ steps.get_version.outputs.release_tag }}
+        tag_name: v1.0.0
         files: |
           DataProm.ETL-${{ matrix.runtime }}.zip
       env:
