@@ -35,7 +35,7 @@ try
 	}
 	DateTime end = DateTime.Now;
 	Console.WriteLine($"Ellapsed {end.Subtract(start).TotalMilliseconds}");
-	DataProm.Core.GlobalApp.StartupDiagnosticsManager.MarkRunCompleted(App.AppConfig);
+	DataProm.Core.StartupDiagnosticsManager.MarkRunCompleted(App.AppConfig);
 }
 catch (Exception ex)
 {
