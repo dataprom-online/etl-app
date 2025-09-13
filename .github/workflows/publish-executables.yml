@@ -28,8 +28,6 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: 🗑️ Delete previous release and tag if exists
-      env:
-        ORG_PAT_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
       run: |
         RELEASE_TAG="v1.0.0" # Change this dynamically if needed
         echo "🔍 Checking for existing release: $RELEASE_TAG"
@@ -68,6 +66,8 @@ jobs:
           -p:PublishSingleFile=true \
           -p:PublishTrimmed=false \
           -o publish/${{ matrix.runtime }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
 
     - name: 📦 Zip build output
       run: |
