@@ -52,7 +52,7 @@ jobs:
     - name: 🔐 Authenticate GitHub Packages
       run: |
         dotnet nuget add source \
-          --username Maros316 \
+          --username dataprom-online \
           --password "${{ secrets.ORG_PAT_TOKEN }}" \
           --store-password-in-clear-text \
           --name github \
