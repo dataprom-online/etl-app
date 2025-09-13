@@ -10,13 +10,16 @@ on:
 
 jobs:    
   build-and-release:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
-        runtime:
-          - win-x64
-          - linux-x64
-          - osx-x64
+        include:
+          - os: ubuntu-latest
+            runtime: linux-x64
+          - os: windows-latest
+            runtime: win-x64
+          - os: macos-latest
+            runtime: osx-x64
+    runs-on: ${{ matrix.os }}
 
     steps:
     - name: 🧾 Checkout source
@@ -29,7 +32,7 @@ jobs:
 
     - name: 🗑️ Delete previous release and tag if exists
       run: |
-        RELEASE_TAG="v1.0.0" # Change this dynamically if needed
+        RELEASE_TAG="v1.0.0"
         echo "🔍 Checking for existing release: $RELEASE_TAG"
 
         if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
@@ -49,13 +52,14 @@ jobs:
     - name: 🔐 Authenticate GitHub Packages
       run: |
         dotnet nuget add source \
-        --username Maros316 \
-        --password "${{ secrets.GITHUB_TOKEN }}" \
-        --store-password-in-clear-text \
-        --name github \
-        "https://nuget.pkg.github.com/dataprom-online/index.json"
-      env:
-        ORG_PAT_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
+          --username Maros316 \
+          --password "${{ secrets.GITHUB_TOKEN }}" \
+          --store-password-in-clear-text \
+          --name github \
+          "https://nuget.pkg.github.com/dataprom-online/index.json"
+
+    - name: 📥 Restore dependencies
+      run: dotnet restore ./DataProm.ETL.csproj
 
     - name: 🏗 Publish single-file executable
       run: |
@@ -66,8 +70,6 @@ jobs:
           -p:PublishSingleFile=true \
           -p:PublishTrimmed=false \
           -o publish/${{ matrix.runtime }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
 
     - name: 📦 Zip build output
       run: |
@@ -78,7 +80,6 @@ jobs:
     - name: 🚀 Upload to GitHub Releases
       uses: softprops/action-gh-release@v1
       with:
-        # skip_release_assets: true
         draft: false
         prerelease: false
         generate_release_notes: false
