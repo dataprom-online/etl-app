@@ -30,11 +30,32 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    - name: 🗑️ Delete previous release and tag if exists
+    - name: 🔐 Authenticate GitHub Packages
       run: |
-        RELEASE_TAG="v1.0.0"
-        echo "🔍 Checking for existing release: $RELEASE_TAG"
+        dotnet nuget add source \
+          --username dataprom-online \
+          --password "${{ secrets.ORG_PAT_TOKEN }}" \
+          --store-password-in-clear-text \
+          --name github \
+          "https://nuget.pkg.github.com/dataprom-online/index.json"
 
+    - name: 📥 Restore dependencies
+      run: dotnet restore ./DataProm.ETL.csproj
+
+    - name: 🗑️ Delete previous release and tag if exists
+      id: get_version
+      shell: bash
+      run: |
+        # extract version from csproj using grep
+        VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" DataProm.ETL.csproj)
+        RELEASE_TAG="v$VERSION"
+
+        # export release tag to GitHub Actions output
+        echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+
+        echo "📦 Using release tag: $RELEASE_TAG"
+
+        echo "🔍 Checking for existing release: $RELEASE_TAG"
         if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
           echo "⚠️ Release '$RELEASE_TAG' exists. Deleting..."
           gh release delete "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --yes
@@ -49,20 +70,9 @@ jobs:
           echo "✅ No existing tag '$RELEASE_TAG'"
         fi
 
-    - name: 🔐 Authenticate GitHub Packages
-      run: |
-        dotnet nuget add source \
-          --username dataprom-online \
-          --password "${{ secrets.ORG_PAT_TOKEN }}" \
-          --store-password-in-clear-text \
-          --name github \
-          "https://nuget.pkg.github.com/dataprom-online/index.json"
-
-    - name: 📥 Restore dependencies
-      run: dotnet restore ./DataProm.ETL.csproj
-
     - name: 🏗 Publish single-file executable
       run: |
+        echo "Building release ${{ steps.get_version.outputs.release_tag }} for runtime ${{ matrix.runtime }}"
         dotnet publish ./DataProm.ETL.csproj \
           -c Release \
           -r ${{ matrix.runtime }} \
@@ -83,7 +93,7 @@ jobs:
         draft: false
         prerelease: false
         generate_release_notes: false
-        tag_name: v1.0.0
+        tag_name: ${{ steps.get_version.outputs.release_tag }}
         files: |
           DataProm.ETL-${{ matrix.runtime }}.zip
       env:
