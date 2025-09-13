@@ -78,7 +78,6 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         # The key line:
-        skip_release_assets: true
         draft: false
         prerelease: false
         generate_release_notes: false
