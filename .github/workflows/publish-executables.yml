@@ -47,6 +47,17 @@ jobs:
           echo "✅ No existing tag '$RELEASE_TAG'"
         fi
 
+    - name: 🔐 Authenticate GitHub Packages
+      run: |
+        dotnet nuget add source \
+        --username dataprom-online \
+        --password "oTi8zni5" \
+        --store-password-in-clear-text \
+        --name github \
+        "https://nuget.pkg.github.com/dataprom-online/index.json"
+      env:
+        NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: 🏗 Publish single-file executable
       run: |
         dotnet publish ./DataProm.ETL.csproj \
@@ -74,4 +85,4 @@ jobs:
         files: |
           DataProm.ETL-${{ matrix.runtime }}.zip
       env:
-        NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
