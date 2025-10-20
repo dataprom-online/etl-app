@@ -49,12 +49,10 @@ jobs:
 
     - name: 🔐 Authenticate GitHub Packages
       run: |
-        dotnet nuget add source \
-        --username dataprom-online \
-        --password "${{ secrets.ORG_PAT_TOKEN }}" \
-        --store-password-in-clear-text \
-        --name github \
-        "https://nuget.pkg.github.com/dataprom-online/index.json"
+         dotnet nuget add source \
+          --api-key "${{ secrets.GITHUB_TOKEN }}" \
+          --source "https://nuget.pkg.github.com/dataprom-online/index.json" \
+          --name github
       env:
         ORG_PAT_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
 
