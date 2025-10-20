@@ -28,7 +28,7 @@ jobs:
 
     - name: 🗑️ Delete previous release and tag if exists
       env:
-        GH_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         RELEASE_TAG="v1.0.0" # Change this dynamically if needed
         echo "🔍 Checking for existing release: $RELEASE_TAG"
@@ -49,12 +49,10 @@ jobs:
 
     - name: 🔐 Authenticate GitHub Packages
       run: |
-         dotnet nuget add source \
+        dotnet nuget add source \
           --api-key "${{ secrets.GITHUB_TOKEN }}" \
           --source "https://nuget.pkg.github.com/dataprom-online/index.json" \
           --name github
-      env:
-        ORG_PAT_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
 
     - name: 🏗 Publish single-file executable
       run: |
@@ -75,7 +73,6 @@ jobs:
     - name: 🚀 Upload to GitHub Releases
       uses: softprops/action-gh-release@v1
       with:
-        # The key line:
         draft: false
         prerelease: false
         generate_release_notes: false
@@ -83,4 +80,4 @@ jobs:
         files: |
           DataProm.ETL-${{ matrix.runtime }}.zip
       env:
-        GITHUB_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
