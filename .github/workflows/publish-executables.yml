@@ -7,7 +7,7 @@ on:
       - '**/*.csproj'
       - '.github/workflows/**'
 
-jobs:
+jobs:    
   build-and-release:
     runs-on: ubuntu-latest
     strategy:
@@ -26,17 +26,37 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
+    - name: 🗑️ Delete previous release and tag if exists
+      env:
+        GH_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
+      run: |
+        RELEASE_TAG="v1.0.0" # Change this dynamically if needed
+        echo "🔍 Checking for existing release: $RELEASE_TAG"
+
+        if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+          echo "⚠️ Release '$RELEASE_TAG' exists. Deleting..."
+          gh release delete "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --yes
+        else
+          echo "✅ No existing release for '$RELEASE_TAG'"
+        fi
+
+        if git rev-parse "$RELEASE_TAG" >/dev/null 2>&1; then
+          echo "🗑️ Tag '$RELEASE_TAG' exists. Deleting..."
+          git push origin :refs/tags/"$RELEASE_TAG"
+        else
+          echo "✅ No existing tag '$RELEASE_TAG'"
+        fi
+
     - name: 🔐 Authenticate GitHub Packages
       run: |
         dotnet nuget add source \
-          --username dataprom-online \
-          --password "${{ secrets.ORG_PAT_TOKEN }}" \
-          --store-password-in-clear-text \
-          --name github \
-          "https://nuget.pkg.github.com/dataprom-online/index.json"
-
-    - name: 📦 Restore NuGet packages
-      run: dotnet restore ./DataProm.ETL.csproj
+        --username dataprom-online \
+        --password "${{ secrets.ORG_PAT_TOKEN }}" \
+        --store-password-in-clear-text \
+        --name github \
+        "https://nuget.pkg.github.com/dataprom-online/index.json"
+      env:
+        ORG_PAT_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
 
     - name: 🏗 Publish single-file executable
       run: |
@@ -57,10 +77,11 @@ jobs:
     - name: 🚀 Upload to GitHub Releases
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v1.0.0  # You can make this dynamic later
+        # The key line:
         draft: false
         prerelease: false
-        generate_release_notes: true
+        generate_release_notes: false
+        tag_name: v1.0.0
         files: |
           DataProm.ETL-${{ matrix.runtime }}.zip
       env:
