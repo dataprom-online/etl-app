@@ -51,12 +51,15 @@ jobs:
       run: |
         dotnet nuget add source \
         --username dataprom-online \
-        --password "oTi8zni5" \
+        --password ${{ secrets.ORG_PAT_TOKEN }} \
         --store-password-in-clear-text \
         --name github \
         "https://nuget.pkg.github.com/dataprom-online/index.json"
       env:
         NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 📦 Restore NuGet packages
+      run: dotnet restore ./DataProm.ETL.csproj
 
     - name: 🏗 Publish single-file executable
       run: |
@@ -85,4 +88,4 @@ jobs:
         files: |
           DataProm.ETL-${{ matrix.runtime }}.zip
       env:
-        GITHUB_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
