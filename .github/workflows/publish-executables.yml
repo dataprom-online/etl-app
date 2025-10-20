@@ -28,7 +28,7 @@ jobs:
 
     - name: 🗑️ Delete previous release and tag if exists
       env:
-        GH_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
+        NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         RELEASE_TAG="v1.0.0" # Change this dynamically if needed
         echo "🔍 Checking for existing release: $RELEASE_TAG"
@@ -46,17 +46,6 @@ jobs:
         else
           echo "✅ No existing tag '$RELEASE_TAG'"
         fi
-
-    - name: 🔐 Authenticate GitHub Packages
-      run: |
-        dotnet nuget add source \
-        --username dataprom-online \
-        --password "oTi8zni5" \
-        --store-password-in-clear-text \
-        --name github \
-        "https://nuget.pkg.github.com/dataprom-online/index.json"
-      env:
-        ORG_PAT_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
 
     - name: 🏗 Publish single-file executable
       run: |
@@ -85,4 +74,4 @@ jobs:
         files: |
           DataProm.ETL-${{ matrix.runtime }}.zip
       env:
-        GITHUB_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
+        NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
