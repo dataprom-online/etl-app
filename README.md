@@ -8,6 +8,8 @@ Developed by **DataProm s.r.o. © 2025**
 
 ---
 
+[![🚀 Publish Executables + SHA256 Checksums](https://github.com/dataprom-online/etl-app/actions/workflows/publish-executables.yml/badge.svg)](https://github.com/dataprom-online/etl-app/actions/workflows/publish-executables.yml)
+
 ## 🧠 What Is This?
 
 This demo shows the power and flexibility of the **DataProm Platform**, a data engineering and analytics framework focused on:
