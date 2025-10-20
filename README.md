@@ -121,12 +121,12 @@ You can download platform-specific executables from the [v1.0.0 Release page](ht
 3. **Make Executable**  
    - If needed, make the file executable:  
      ```sh
-     chmod +x DataProm.ETL-linux-x64
+     chmod +x DataProm.ETL
      ```
 4. **Run**  
    - Start the application with:  
      ```sh
-     ./DataProm.ETL-linux-x64
+     ./DataProm.ETL
      ```
 </details>
 ---
@@ -150,12 +150,12 @@ You can download platform-specific executables from the [v1.0.0 Release page](ht
 3. **Make Executable**  
    - If needed, make the file executable:  
      ```sh
-     chmod +x DataProm.ETL-osx-x64
+     chmod +x DataProm.ETL
      ```
 4. **Run**  
    - Start the application with:  
      ```sh
-     ./DataProm.ETL-osx-x64
+     ./DataProm.ETL
      ```
 </details>
 ---
