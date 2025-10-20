@@ -86,7 +86,7 @@ internal static class ETLPipeline
     /// <param name="data"></param>
     public static void Load(IEnumerable<DynamicRecordStruct> data)
     {
-        MetaRecord meta = MetaData.GetMetaRecord("DummyData");
+        MetaRecord meta = MetaData.GetMetaRecord("DummyData", MetaRecord.Direction.Download);
         using (var db = AppDatabase.UploadDb)
         {
             db.EnsureOpen();

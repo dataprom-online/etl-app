@@ -84,7 +84,7 @@ internal class AppData
             new MetaProperty("prop13", MetaProperty.MetaType.Object,MetaProperty.MetaDisplayFormat.StringDateTime, dateTimeFormat: "yyyyMMddHHmmss"),
             new MetaProperty("prop14", MetaProperty.MetaType.Object,MetaProperty.MetaDisplayFormat.StringTimeOnly, timeFormat:"HHmmss"),
             new MetaProperty("prop15", MetaProperty.MetaType.Normalized, MetaProperty.MetaDisplayFormat.String)
-        }, null);
+        }, null, MetaRecord.Direction.Download);
     }
 
     #region App Data (configs, fetch, metadata)
