@@ -21,7 +21,7 @@ on:
         default: 'v1.0.0'
 
 jobs:
-  build-and-release:
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -36,6 +36,17 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: 🔐 Authenticate GitHub Packages
+        run: |
+          dotnet nuget add source \
+            --username dataprom-online \
+            --password "${{ secrets.ORG_PAT_TOKEN }}" \
+            --store-password-in-clear-text \
+            --name github \
+            "https://nuget.pkg.github.com/dataprom-online/index.json"
+        env:
+          ORG_PAT_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
+
       - name: Resolve project path
         id: resolve_path
         run: |
@@ -43,10 +54,11 @@ jobs:
             echo "project_path=DataProm.ETLConsoleApp/DataProm.ETLConsoleApp.csproj" >> $GITHUB_OUTPUT
           else
             echo "project_path=DataProm.ETLSelfConfiguredApp/DataProm.ETLSelfConfiguredApp.csproj" >> $GITHUB_OUTPUT
-          fi
 
       - name: Restore dependencies
-        run: dotnet restore ${{ steps.resolve_path.outputs.project_path }}
+        run: dotnet restore ${{ steps.resolve_path.outputs.project_path }} \
+              --source "https://nuget.pkg.github.com/dataprom-online/index.json" \
+              --source "https://api.nuget.org/v3/index.json"
 
       - name: Publish for ${{ matrix.runtime }}
         run: |
@@ -55,25 +67,26 @@ jobs:
             --runtime ${{ matrix.runtime }} \
             --self-contained true \
             --output ./publish/${{ matrix.runtime }}
-      
-      - name: Package as ZIP
+
+      - name: Package as versioned ZIP
         run: |
+          ZIP_NAME="${{ github.event.inputs.app_type }}_${{ matrix.runtime }}_${{ github.event.inputs.version }}.zip"
           cd publish/${{ matrix.runtime }}
-          zip -r ../../app_${{ matrix.runtime }}.zip .
+          zip -r ../../$ZIP_NAME .
           cd ../..
-      
+          echo "zip_path=$ZIP_NAME" >> $GITHUB_OUTPUT
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app_${{ matrix.runtime }}
-          path: app_${{ matrix.runtime }}.zip
+          name: ${{ github.event.inputs.app_type }}_${{ matrix.runtime }}
+          path: ${{ steps.package_as_zip.outputs.zip_path }}
 
-  create-release:
+  release:
     runs-on: ubuntu-latest
-    needs: build-and-release
-
+    needs: build
     steps:
-      - name: Download all build artifacts
+      - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
           path: ./artifacts
@@ -87,8 +100,8 @@ jobs:
             Automated release for ${{ github.event.inputs.app_type }}
             Configuration: ${{ github.event.inputs.configuration }}
           files: |
-            artifacts/app_win-x64/*.zip
-            artifacts/app_linux-x64/*.zip
-            artifacts/app_osx-x64/*.zip
+            artifacts/${{ github.event.inputs.app_type }}_win-x64_*.zip
+            artifacts/${{ github.event.inputs.app_type }}_linux-x64_*.zip
+            artifacts/${{ github.event.inputs.app_type }}_osx-x64_*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
