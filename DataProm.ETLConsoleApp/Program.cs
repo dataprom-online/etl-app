@@ -23,8 +23,8 @@ try
     // ✅ Validate argument
     if (string.IsNullOrWhiteSpace(appName))
     {
-        ConsolePrint.WriteLine("Error: Missing or invalid argument '--appName <name>'", ConsolePrint.Category.Error);
-        ConsolePrint.WriteLine("Error: Missing or invalid argument '--appName <name>'", ConsolePrint.Category.Warning);
+        ConsolePrint.WriteLine("Error: Missing or invalid argument '--app <name>'", ConsolePrint.Category.Error);
+        ConsolePrint.WriteLine("Error: Missing or invalid argument '--app <name>'", ConsolePrint.Category.Warning);
         ShowUsage();
         return;
     }

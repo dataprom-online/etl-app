@@ -71,7 +71,7 @@ jobs:
       - name: 📦 Zip build output
         id: zip_build_output
         run: |
-          ZIP_NAME="${{ github.event.inputs.app_type }}_${{ matrix.runtime }}_${{ github.event.inputs.version }}.zip"
+          ZIP_NAME="DataProm.${{ github.event.inputs.app_type }}_${{ matrix.runtime }}_${{ github.event.inputs.version }}.zip"
           cd publish/${{ matrix.runtime }}
           zip -r ../../$ZIP_NAME *
           cd -
