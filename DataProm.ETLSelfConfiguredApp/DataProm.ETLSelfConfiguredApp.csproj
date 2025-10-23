@@ -30,10 +30,8 @@
   </PropertyGroup>
   <!-- ===== Dependencies ===== -->
   <ItemGroup>
-    <Content Include="icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="LICENSE.txt" Pack="true" PackagePath="" visible="true" />
+    <None Include="../LICENSE.txt" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../icon.ico" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DataProm.Core" Version="2.5.0" />

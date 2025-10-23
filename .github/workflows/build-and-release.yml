@@ -1,4 +1,4 @@
-name: 🚀 Publish Release
+name: 🚀 Build & Release Executables
 
 on:
   workflow_dispatch:
@@ -20,7 +20,7 @@ on:
         required: false
         default: 'v1.0.0'
 
-jobs:    
+jobs:
   build-and-release:
     runs-on: ubuntu-latest
     strategy:
@@ -43,28 +43,6 @@ jobs:
             echo "project_path=DataProm.ETLConsoleApp/DataProm.ETLConsoleApp.csproj" >> $GITHUB_OUTPUT
           else
             echo "project_path=DataProm.ETLSelfConfiguredApp/DataProm.ETLSelfConfiguredApp.csproj" >> $GITHUB_OUTPUT
-          fi
-
-      - name: 🗑️ Delete previous release and tag if exists
-        env:
-          GH_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
-        run: |
-          RELEASE_TAG="${{ github.event.inputs.version }}"
-          echo "🔍 Checking for existing release: $RELEASE_TAG"
-
-          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
-            echo "⚠️ Release '$RELEASE_TAG' exists. Deleting..."
-            gh release delete "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --yes
-          else
-            echo "✅ No existing release for '$RELEASE_TAG'"
-          fi
-
-          if git rev-parse "$RELEASE_TAG" >/dev/null 2>&1; then
-            echo "🗑️ Tag '$RELEASE_TAG' exists. Deleting..."
-            git push origin :refs/tags/"$RELEASE_TAG"
-          else
-            echo "✅ No existing tag '$RELEASE_TAG'"
-          fi
 
       - name: 🔐 Authenticate GitHub Packages
         run: |
@@ -96,7 +74,13 @@ jobs:
           cd -
           echo "zip_path=$ZIP_NAME" >> $GITHUB_OUTPUT
 
-      - name: 🚀 Upload to GitHub Releases
+      - name: 🔐 Generate SHA256 checksum
+        id: sha256_step
+        run: |
+          sha256sum ${{ steps.zip_build_output.outputs.zip_path }} > ${{ steps.zip_build_output.outputs.zip_path }}.sha256
+          echo "sha256_path=${{ steps.zip_build_output.outputs.zip_path }}.sha256" >> $GITHUB_OUTPUT
+
+      - name: 🚀 Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.version }}
@@ -104,6 +88,8 @@ jobs:
           body: |
             Automated release for ${{ github.event.inputs.app_type }}
             Configuration: ${{ github.event.inputs.configuration }}
-          files: ${{ steps.resolve_path.outputs.project_path }}
+          files: |
+            ${{ steps.zip_build_output.outputs.zip_path }}
+            ${{ steps.sha256_step.outputs.sha256_path }}
         env:
           GITHUB_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
