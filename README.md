@@ -4,7 +4,7 @@
 
 Developed by **DataProm s.r.o. © 2025**
 
-⚠️ This project is licensed under a proprietary license. See [LICENSE.txt](./LICENSE.txt) for details.
+⚠️ This project is licensed under a proprietary license. See [LICENSE.txt](./DataProm.ETLConsoleApp/LICENSE.txt) for details.
 
 ---
 
