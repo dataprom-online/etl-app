@@ -83,7 +83,10 @@ jobs:
       - name: 🚀 Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.event.inputs.version }}
+          draft: false
+          prerelease: false
+          generate_release_notes: false
+          # tag_name: ${{ github.event.inputs.version }}
           name: "Release ${{ github.event.inputs.version }} - ${{ github.event.inputs.app_type }}"
           body: |
             Automated release for ${{ github.event.inputs.app_type }}
