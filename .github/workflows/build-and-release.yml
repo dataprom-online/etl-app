@@ -1,0 +1,76 @@
+name: Manual Build and Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_path:
+        description: 'Path to .csproj (e.g. DataProm.ETLConsoleApp/DataProm.ETLConsoleApp.csproj)'
+        required: true
+      configuration:
+        description: 'Build configuration (Debug or Release)'
+        required: false
+        default: 'Release'
+      version:
+        description: 'Version tag for release (e.g. v1.0.0)'
+        required: true
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        runtime: [win-x64, linux-x64, osx-x64]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ github.event.inputs.project_path }}
+
+      - name: Publish for ${{ matrix.runtime }}
+        run: |
+          dotnet publish ${{ github.event.inputs.project_path }} \
+            --configuration ${{ github.event.inputs.configuration }} \
+            --runtime ${{ matrix.runtime }} \
+            --self-contained true \
+            --output ./publish/${{ matrix.runtime }}
+      
+      - name: Package as ZIP
+        run: |
+          cd publish/${{ matrix.runtime }}
+          zip -r ../../${{ matrix.runtime }}.zip .
+          cd ../..
+      
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app_${{ matrix.runtime }}
+          path: ${{ matrix.runtime }}.zip
+
+  create-release:
+    runs-on: ubuntu-latest
+    needs: build-and-release
+
+    steps:
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          name: "Release ${{ github.event.inputs.version }}"
+          files: |
+            artifacts/app_win-x64/*.zip
+            artifacts/app_linux-x64/*.zip
+            artifacts/app_osx-x64/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
