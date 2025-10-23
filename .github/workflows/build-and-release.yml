@@ -39,11 +39,13 @@ jobs:
       - name: Resolve project path
         id: resolve_path
         run: |
-          if [ "${{ github.event.inputs.app_type }}" == "ConsoleApp" ]; then
-            echo "project_path=DataProm.ETLConsoleApp/DataProm.ETLConsoleApp.csproj" >> $GITHUB_OUTPUT
+          PROJECT_PATH=""
+          if [[ "${{ github.event.inputs.app_type }}" == "ConsoleApp" ]]; then
+            PROJECT_PATH="DataProm.ETLConsoleApp/DataProm.ETLConsoleApp.csproj"
           else
-            echo "project_path=DataProm.ETLSelfConfiguredApp/DataProm.ETLSelfConfiguredApp.csproj" >> $GITHUB_OUTPUT
+            PROJECT_PATH="DataProm.ETLSelfConfiguredApp/DataProm.ETLSelfConfiguredApp.csproj"
           fi
+          echo "project_path=$PROJECT_PATH" >> $GITHUB_OUTPUT
 
       - name: 🔐 Authenticate GitHub Packages
         run: |
@@ -81,13 +83,10 @@ jobs:
           sha256sum ${{ steps.zip_build_output.outputs.zip_path }} > ${{ steps.zip_build_output.outputs.zip_path }}.sha256
           echo "sha256_path=${{ steps.zip_build_output.outputs.zip_path }}.sha256" >> $GITHUB_OUTPUT
 
-      - name: 🚀 Upload to GitHub Release
+      - name: 🚀 Upload all runtime ZIPs to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          draft: false
-          prerelease: false
-          generate_release_notes: false
-          # tag_name: ${{ github.event.inputs.version }}
+          tag_name: ${{ github.event.inputs.version }}
           name: "Release ${{ github.event.inputs.version }} - ${{ github.event.inputs.app_type }}"
           body: |
             Automated release for ${{ github.event.inputs.app_type }}
