@@ -54,6 +54,8 @@ jobs:
             echo "project_path=DataProm.ETLConsoleApp/DataProm.ETLConsoleApp.csproj" >> $GITHUB_OUTPUT
           else
             echo "project_path=DataProm.ETLSelfConfiguredApp/DataProm.ETLSelfConfiguredApp.csproj" >> $GITHUB_OUTPUT
+          fi
+
 
       - name: Restore dependencies
         run: dotnet restore ${{ steps.resolve_path.outputs.project_path }} \
