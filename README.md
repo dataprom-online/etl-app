@@ -8,7 +8,7 @@ Developed by **DataProm s.r.o. © 2025**
 
 ---
 
-[![🚀 Publish Executables + SHA256 Checksums](https://github.com/dataprom-online/etl-app/actions/workflows/publish-executables.yml/badge.svg)](https://github.com/dataprom-online/etl-app/actions/workflows/publish-executables.yml)
+[![🚀 Build & Release Executables](https://github.com/dataprom-online/etl-app/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/dataprom-online/etl-app/actions/workflows/build-and-release.yml)
 
 ## 🧠 What Is This?
 
