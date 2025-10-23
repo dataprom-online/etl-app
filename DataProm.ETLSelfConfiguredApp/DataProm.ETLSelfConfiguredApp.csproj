@@ -23,10 +23,10 @@
     <PackageTags>DataProm;ETL;Connector;Sqlite</PackageTags>
     <RepositoryUrl>https://github.com/dataprom-online/etl-app</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageLicenseFile>../LICENSE.txt</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <ApplicationIcon>../icon.ico</ApplicationIcon>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <!-- ===== Dependencies ===== -->
   <ItemGroup>
