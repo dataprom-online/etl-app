@@ -1,0 +1,36 @@
+Copyright © 2025 DataProm s.r.o.
+All rights reserved.
+
+This software is the confidential and proprietary property of DataProm s.r.o. It is licensed, not sold. You may only use this software in accordance with the terms below.
+
+1. LICENSE GRANT
+You are granted a non-exclusive, non-transferable, limited license to use the DataProm software platform and its libraries solely for:
+  - Internal business purposes
+  - Evaluation and testing
+  - Production use within an authorized or licensed environment
+
+2. RESTRICTIONS
+You may NOT:
+  - Redistribute, sublicense, resell, or lease this software
+  - Decompile, reverse-engineer, or modify the software
+  - Remove or alter copyright or licensing notices
+  - Use the software in a multi-tenant, SaaS, or cloud-distribution model without written permission
+
+3. OWNERSHIP
+All intellectual property rights in the software remain the sole property of DataProm s.r.o. This license does not convey any ownership or interest in the software.
+
+4. SUPPORT AND MAINTENANCE
+This license does not include any right to support, maintenance, or upgrades, unless specified in a separate agreement.
+
+5. DISCLAIMER OF WARRANTY
+This software is provided "AS IS" without warranties of any kind, express or implied. DataProm s.r.o. shall not be liable for any damages resulting from the use of this software.
+
+6. TERMINATION
+This license is automatically terminated if you breach any of these terms. Upon termination, you must cease use of the software and delete all copies.
+
+7. CONTACT
+For licensing, partnership, or support inquiries, please contact:
+
+DataProm s.r.o.  
+Email: maros.kolibas@dataprom.online  
+Website: https://www.dataprom.online
