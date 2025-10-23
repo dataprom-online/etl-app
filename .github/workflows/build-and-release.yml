@@ -88,6 +88,7 @@ jobs:
             -o publish/${{ matrix.runtime }}
 
       - name: 📦 Zip build output
+        id: zip_build_output
         run: |
           ZIP_NAME="${{ github.event.inputs.app_type }}_${{ matrix.runtime }}_${{ github.event.inputs.version }}.zip"
           cd publish/${{ matrix.runtime }}
