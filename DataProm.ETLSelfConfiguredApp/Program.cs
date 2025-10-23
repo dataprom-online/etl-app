@@ -4,7 +4,7 @@ using DataProm.Core;
 using DataProm.Core.Data;
 using DataProm.ETL;
 
-ConsolePrint.PrintColoredTitle("DataProm s.r.o. © 2025");
+ConsolePrint.WriteLine("DataProm s.r.o. © 2025", ConsolePrint.Category.Title);
 
 // Main point
 try
