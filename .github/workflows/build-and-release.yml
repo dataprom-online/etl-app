@@ -1,4 +1,4 @@
-name: Manual Build and Release
+name: 🚀 Publish Executables + SHA256 Checksums
 
 on:
   workflow_dispatch:
@@ -12,29 +12,59 @@ on:
           - ConsoleApp
           - SelfConfiguredApp
       configuration:
-        description: 'Build configuration (Debug or Release)'
+        description: 'Build configuration (Debug/Release)'
         required: false
         default: 'Release'
       version:
-        description: 'Version tag for release (e.g. v1.0.0)'
+        description: 'Release version (e.g., v1.0.0)'
         required: false
         default: 'v1.0.0'
 
-jobs:
-  build:
+jobs:    
+  build-and-release:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         runtime: [win-x64, linux-x64, osx-x64]
 
     steps:
-      - name: Checkout code
+      - name: 🧾 Checkout source
         uses: actions/checkout@v4
 
-      - name: Setup .NET
+      - name: 🛠 Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
+
+      - name: Resolve project path
+        id: resolve_path
+        run: |
+          if [ "${{ github.event.inputs.app_type }}" == "ConsoleApp" ]; then
+            echo "project_path=DataProm.ETLConsoleApp/DataProm.ETLConsoleApp.csproj" >> $GITHUB_OUTPUT
+          else
+            echo "project_path=DataProm.ETLSelfConfiguredApp/DataProm.ETLSelfConfiguredApp.csproj" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🗑️ Delete previous release and tag if exists
+        env:
+          GH_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
+        run: |
+          RELEASE_TAG="${{ github.event.inputs.version }}"
+          echo "🔍 Checking for existing release: $RELEASE_TAG"
+
+          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            echo "⚠️ Release '$RELEASE_TAG' exists. Deleting..."
+            gh release delete "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --yes
+          else
+            echo "✅ No existing release for '$RELEASE_TAG'"
+          fi
+
+          if git rev-parse "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "🗑️ Tag '$RELEASE_TAG' exists. Deleting..."
+            git push origin :refs/tags/"$RELEASE_TAG"
+          else
+            echo "✅ No existing tag '$RELEASE_TAG'"
+          fi
 
       - name: 🔐 Authenticate GitHub Packages
         run: |
@@ -47,53 +77,25 @@ jobs:
         env:
           ORG_PAT_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
 
-      - name: Resolve project path
-        id: resolve_path
-        run: |
-          if [ "${{ github.event.inputs.app_type }}" == "ConsoleApp" ]; then
-            echo "project_path=DataProm.ETLConsoleApp/DataProm.ETLConsoleApp.csproj" >> $GITHUB_OUTPUT
-          else
-            echo "project_path=DataProm.ETLSelfConfiguredApp/DataProm.ETLSelfConfiguredApp.csproj" >> $GITHUB_OUTPUT
-          fi
-
-
-      - name: Restore dependencies
-        run: dotnet restore ${{ steps.resolve_path.outputs.project_path }} \
-              --source "https://nuget.pkg.github.com/dataprom-online/index.json" \
-              --source "https://api.nuget.org/v3/index.json"
-
-      - name: Publish for ${{ matrix.runtime }}
+      - name: 🏗 Publish single-file executable
         run: |
           dotnet publish ${{ steps.resolve_path.outputs.project_path }} \
-            --configuration ${{ github.event.inputs.configuration }} \
-            --runtime ${{ matrix.runtime }} \
+            -c ${{ github.event.inputs.configuration }} \
+            -r ${{ matrix.runtime }} \
             --self-contained true \
-            --output ./publish/${{ matrix.runtime }}
+            -p:PublishSingleFile=true \
+            -p:PublishTrimmed=false \
+            -o publish/${{ matrix.runtime }}
 
-      - name: Package as versioned ZIP
+      - name: 📦 Zip build output
         run: |
           ZIP_NAME="${{ github.event.inputs.app_type }}_${{ matrix.runtime }}_${{ github.event.inputs.version }}.zip"
           cd publish/${{ matrix.runtime }}
-          zip -r ../../$ZIP_NAME .
-          cd ../..
+          zip -r ../../$ZIP_NAME *
+          cd -
           echo "zip_path=$ZIP_NAME" >> $GITHUB_OUTPUT
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ github.event.inputs.app_type }}_${{ matrix.runtime }}
-          path: ${{ steps.package_as_zip.outputs.zip_path }}
-
-  release:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: ./artifacts
-
-      - name: Create GitHub Release
+      - name: 🚀 Upload to GitHub Releases
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.version }}
@@ -101,9 +103,6 @@ jobs:
           body: |
             Automated release for ${{ github.event.inputs.app_type }}
             Configuration: ${{ github.event.inputs.configuration }}
-          files: |
-            artifacts/${{ github.event.inputs.app_type }}_win-x64_*.zip
-            artifacts/${{ github.event.inputs.app_type }}_linux-x64_*.zip
-            artifacts/${{ github.event.inputs.app_type }}_osx-x64_*.zip
+          files: ${{ steps.resolve_path.outputs.project_path }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ORG_PAT_TOKEN }}
